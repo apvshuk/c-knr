@@ -13,8 +13,6 @@ int main(void) {
 			putchar(c);
 			lc = c;
 		}
-
-		
 	}
 
 	return 0;
