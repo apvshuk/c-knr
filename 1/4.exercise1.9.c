@@ -1,11 +1,12 @@
 // Exercise 1-9. Write a program to copy its input to its output, replacing each string of one or more blanks by a single blank.
 
+// this solution addresses slightly more than the problem: The first space or bunch of spaces even before the first word starts, is or are not printed in the output.
+
 #include <stdio.h>
 
 int main(void) {
 	int c, lc;
-	lc = 0; // why initialized to zero - Uninitialized variables containing garbage that happens to be 32 (space) is a real class of bug; which will cause eating of the first character. '\0' null character — no text input can match it, safe initial state
-
+	lc = ' ';
 	// c - character; lc - last PRINTED character;
 
 	while ((c = getchar()) != EOF) {
@@ -13,6 +14,8 @@ int main(void) {
 			putchar(c);
 			lc = c;
 		}
+		if (c == '\n')
+			lc = ' ';
 	}
 
 	return 0;
