@@ -3,97 +3,48 @@
 // // program does something intelligent with very long lines, and if there are no blanks or tabs
 // // before the specified column.
 
-// #include <stdio.h>
-
-// #define MAXCOL 40
-
-// int main(void) {
-// 	int c, i, col = 0, n = 0;
-// 	char buffer[MAXCOL];
-
-// 	while ((c = getchar()) != EOF) {
-// 		++col;
-
-// 		if (c == ' ') {
-// 			putchar(c);
-// 			if (col == MAXCOL) {
-// 				putchar('\n'), col = 0;
-// 			}
-// 			if ((MAXCOL - col) < n) {
-// 				for (i = 0; i < n; ++i)
-// 					putchar(buffer[i]);
-// 				n = 0;
-// 			}
-// 		}
-// 		else {
-// 			if (col <= MAXCOL) {
-// 				buffer[n] = c;
-// 				++n;
-// 			} else
-// 				n = 0, putchar('\n'), col = 0;
-// 		}
-// 	}
-
-// 	return 0;
-// }
-
 #include <stdio.h>
 
-#define MAXCOL 40
+#define MAXCOL 50
 
 int main(void) {
-    int c, i, col, n;
-    char buf[MAXCOL];
+    int i, c, n, col;
+    char buff[MAXCOL];
+    // difference between n and col - although col resets at newline, it is different from n as n resets at every space, i.e end of word; also n can be greater than MAXCOL, as words can have more characters than MAXCOL, but col will reset as soon as a new line starts which does when col reaches MAXCOL
 
-    col = 0;
-    n = 0;
+    n = col = 0;
 
     while ((c = getchar()) != EOF) {
         if (c == '\n') {
+            // flush buff for the last word, which never gets flushed if trailing characer is not blank
             for (i = 0; i < n; ++i)
-                putchar(buf[i]);
-            putchar('\n');
-            col = 0;
-            n = 0;
-        } else if (c == ' ' || c == '\t') {
-            if (n == 0)
-                continue;                   /* skip multiple spaces */
-            if (col + 1 + n > MAXCOL) {    /* word doesn't fit — fold */
-                putchar('\n');
-                for (i = 0; i < n; ++i)
-                	putchar(buf[i]);
-                col = n;
-            } else {                        /* word fits — print space then word */
-                if (col > 0) {
-                    putchar(' ');
-                    ++col;
+                putchar(buff[i]);
+            col = n = 0;
+            putchar('\n'); // next input in a newline
+        } else {
+            ++col;
+            if (c == ' ' || c == '\t') {
+                if (n > (MAXCOL - col)) {
+                    putchar('\n'), col = 0;
                 }
                 for (i = 0; i < n; ++i)
-                    putchar(buf[i]);
+                    putchar(buff[i]);
                 col += n;
-            }
-            n = 0;
-        } else {
-            buf[n++] = c;
-            if (n == MAXCOL) {             /* word longer than MAXCOL — hard cut */
-                if (col > 0)
+
+                n = 0; // word ended, so reset word length tracker, which is n
+                putchar(' ');
+            } else {
+                if (n == MAXCOL && col == 0) {
+                    for (i = 0; i < MAXCOL; ++i) // i < MAXCOL, not i < n
+                        putchar(buff[i]);
                     putchar('\n');
-                for (i = 0; i < n; ++i)
-                    putchar(buf[i]);
-                putchar('\n');
-                col = 0;
-                n = 0;
+                    col = 0;
+                    n = 0;
+                }
+                buff[n] = c;
+                ++n;
             }
         }
-    }
-    if (n > 0) {                           /* flush remaining buffer at EOF */
-        if (col + 1 + n > MAXCOL)
-            putchar('\n');
-        else if (col > 0)
-            putchar(' ');
-        for (i = 0; i < n; ++i)
-            putchar(buf[i]);
-        putchar('\n');
     }
 
     return 0;
