@@ -12,7 +12,6 @@ int main(void) {
     int len = 0;
 
     while ((len = get_line(line)) > 0) {
-        ;
         if ((len = clean(line, len)) > 0) {
             printf("%s", line);
         }
