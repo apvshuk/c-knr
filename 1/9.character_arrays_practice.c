@@ -39,7 +39,7 @@ int get_line(char given_line[], int limit) {
 void copy(char from[], char to[]) {
     int i = 0;
 
-    // remember that assignment returns the value of from[i], meaning the variable assigning to one getting assigned. This is critical, because otherwise had the value of to[i] been returned, the while loop would have ended as and when the smaller array ends, which is undesirable, for we need the bigger array to decide when to end the loop, so that no input character is missed. So, that assignment will return a null character '\0' at the end of the from[i] array; that's how we know when the array ends, by '\0'.
+    // remember that assignment returns the value of from[i], meaning the variable assigning to one getting assigned. This is critical, because otherwise had the value of to[i] been returned, the while loop would have ended as and when the smaller array ends, which is undesirable, for we need the bigger array to decide when to end the loop, so that no input character is missed. So, that assignment will return a null character '\0' at the end of the from[i] array; that's how we know when the array ends, by '\0'. Also, printf printing a character array expects '\0' ending to know where to stop.
     while ((to[i] = from[i]) != '\0')
         ++i;
 }
