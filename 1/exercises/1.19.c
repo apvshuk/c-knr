@@ -2,56 +2,40 @@
 // s. Use it to write a program that reverses its input a line at a time.
 
 #include <stdio.h>
-#define MAXLENGTH 1000
+#define MAXLENGTH 10
 
+// returns the number of characters in the input, not
+// counting '\n' and '\0'
 int get_line(char line[]);
-int reverse(char line[], char reversed[], int len);
+void reverse(char line[], char reversed[], int len);
 
 int main(void) {
     char line[MAXLENGTH], reversed[MAXLENGTH];
     int len = 0;
 
     while ((len = get_line(line)) > 0) {
-        if ((len = reverse(line, reversed, len)) > 0) {
-            printf("%s", reversed);
-        }
+        reverse(line, reversed, len);
+        printf("%s\n", reversed);
     }
 
     return 0;
 }
 
-int reverse(char line[], char reversed[], int len) {
-    int i;
-    int end = len;
-
-    if (line[len - 1] == '\n')
-        end = len - 1;
-
-    for (i = 0; i < end; ++i)
-        reversed[end - 1 - i] = line[i];
-
-    if (end < len)
-        reversed[end] = '\n';
-
+void reverse(char line[], char reversed[], int len) {
+    int i = 0;
+    while (len - i - 1 >= 0)
+        reversed[len - i - 1] = line[i], ++i;
     reversed[len] = '\0';
-
-    return len;
 }
 
 int get_line(char line[]) {
     int c, i = 0;
-    for (i = 0; (c = getchar()) != '\n' && c != EOF; ++i)
-        if (i < MAXLENGTH - 1)
-            line[i] = c;
 
-    if (c == '\n') {
+    while ((c = getchar()) != '\n' && c != EOF) {
         if (i < MAXLENGTH - 1)
-            line[i] = c, ++i;
+            line[i++] = c;
     }
 
-    line[i < MAXLENGTH - 1 ? i : MAXLENGTH - 1] = '\0';
-    // marks end of the array; both reverse and printf need
-    // termination marker with a null character '\0'
-
-    return i;
+    line[i] = '\0';
+    return i; // letters only, no '\n' involved
 }
