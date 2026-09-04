@@ -85,3 +85,5 @@ int main(void) {
 
     return 0;
 }
+
+// yet todo: range for float, double, and long float.
