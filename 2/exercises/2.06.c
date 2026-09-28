@@ -8,26 +8,18 @@ int setbits(int x, int p, int n, int y);
 
 int main(void) {
 
-    printf("%d", setbits(0b1111, 3, 3, 0b1010));
+    printf("%d\n\n", setbits(202, 5, 7, 306));
 
     return 0;
 }
 
 int setbits(int x, int p, int n, int y) {
-    // Step 1: Isolate the rightmost n bits of y
-    int mask = ~(~0 << n);
-    int y_ = y & mask;
+    int donor = y & ~(~0 << n); // Get the rightmost n bits of y
+    int donor_shifted = donor << p; // generates 1s only where x must be changed
+    int x_cleansed = x & ~(donor_shifted); // generates 0s only where x must be changed
 
-    // Step 2: Left shift y_ into its target position
-    int y_shifted = y_ << (p - n + 1);
+    int result = x_cleansed | donor_shifted;
 
-    // Step 3: Create a mask to clear the target bits in x
-    // This creates ones everywhere except at the target position, which are
-    // zeroes
-    int x_clear_mask = ~(mask << (p - n + 1));
+    return result;
 
-    // Step 4: Clear the hole in x, then drop in the shifted y bits
-    x = (x & x_clear_mask) | y_shifted;
-
-    return x;
 }
